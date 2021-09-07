@@ -1,0 +1,269 @@
+\documentclass{article}
+\usepackage{geometry}
+
+\def\nauthor{Stephen Iota}
+\def\nclass{ee503 probability}
+\def\npset{Problem Set 1}
+\def\ndate{\today}
+\def\nemail{iota@usc.edu}
+\def\nthanks{SID: 6862013543}
+
+\include{header.tex}
+
+%%%%%%%%%%%%%
+%%% Begin %%%
+%%%%%%%%%%%%%
+\begin{document}
+
+    \makemytitle
+
+    \nextproblem
+
+    \begin{problem}
+        Show that
+        \begin{equation}
+            P(\union^n_{i=1} E_i) \leq \sum_{i=1}^n P(E_i).
+            \label{eq:boole}
+        \end{equation}
+        This is known as Boole's inequality.
+    \end{problem}
+
+    \begin{solution}
+        \begin{proof}
+            We will prove \pref{eq:boole} by induction on the number of events $n$.
+
+            Base case n = 1: only one event $E_1$.
+            $P(E_1) \leq P(E_1)$.
+            This is trivially true.
+
+            Inductive step: assume \pref{eq:boole} holds for $n - 1$ events. That is,
+            \begin{equation}
+                P(\union^{n-1}_{i=1} E_i) \leq \sum_{i=1}^{n-1} P(E_i)
+                \label{eq:inductive}
+            \end{equation}.
+
+            Now consider $n$ events. Let $G$ be the union of the first $n - 1$ events; 
+            $G = \union^{n-1}_{i=1} E_i$.
+            So we can rewrite \pref{eq:boole} as 
+            \begin{align*}
+                P(G \union E_n) &\leq \sum_{i=1}^{n-1} P(E_i) + P(E_n) \\
+                P(G) + P(E_n) - P(G \intersect E_n) &\leq \sum_{i=1}^{n-1} P(E_i) + P(E_n)
+            \end{align*}
+            , where in the last step we use the definition of probability of a union. From the inductive assumption \pref{eq:inductive}, we already have $P(G)$ less than or equal to the sum of the probability of the first $n - 1$ events. So what's left is to show is 
+            \begin{equation*}
+                P(E_n) - P(G \intersect E_n) \leq P(E_n)
+            \end{equation*}
+            . The value of $P(G \intersect E_n)$ must be nonnegative, following from the first axiom of probability (the probability of any event is between 0 and 1 inclusive). Canceling out $P(E_n)$ on bothsides, we have left a value between 0 and $1$ that is required to be greater than or equal to 0; a true statement.
+            \begin{equation*}
+                P(G \intersect E_n) \geq 0 
+            \end{equation*}
+            It follows by induction that \pref{eq:boole} is true for all positive integer number of events.
+        \end{proof}
+    \end{solution}
+
+    %\nextproblem
+    \newpage
+
+    \begin{problem}
+        The dice game craps is played as follows. The player throws two dice and if the sum is seven or eleven, then she wins. If the sum is two, three, or twelve, then she loses. If the sum is anything else, then she continues throwing until she either throws that number again (in which case she wins) or she throws a seven (in which case she loses). Calculate the probability that the player wins.
+    \end{problem}
+
+    \begin{solution}
+        Let $P(W)$ denote the probability of winning at craps. To win, either you must roll value $x \in \set{7, 11}$ or roll value $y \in \set{4, 5, 6, 8, 9, 10, 11}$ and then roll value $y$ again. Let $A$ be the event where you win on the first turn, and $B$ be the event where you win on a subsequent roll. 
+
+        These two events are disjoint, so the probability of winning turns to $P(W) = P(A) + P(B)$. $P(A)$ is simply the probability of rolling either a 7 or 11 on the first try; $P(A) = P(7) + P(11)$. (Note that rolling a 7 or 11 is disjoint).
+
+        To find $P(B)$, remember that the initial dice roll and the subsequent roll are mutually exclusive; $P(\text{roll}_2 \intersect \text{roll}_1)) = P(\text{roll}_1)P(\text{roll}_2)$. Secondly, we do not care about all events that are not in $\text{roll}_1 \union 7$; we calculate the probabilities of $\text{roll}_2$ over the new sample space $B' = \set{\text{roll}_1 \union 7}$ So we can express the probability of winning in the two roll scenario $P(B)$ as follows.
+        \begin{align*}
+            P(B) &= \sum_{n \in B, n' \in B'} P(n)P(n')  && B = \set{4, 5, 6, 8, 9, 10, 11}, \ B' = \set{n \union 7}, 
+            \ \text{require } n = n'
+        \end{align*}
+        So we can now express the final probability of winning.
+        \begin{equation}
+            \begin{aligned}
+                P(W) &= P(7) + P(11) +  \sum_{n \in B, n' \in B'} P(n)P(n')  \\ 
+                \text{given: } & \quad B = \set{4, 5, 6, 8, 9, 10, 11}, \ B' = \set{n \union 7}, \ \text{require } n = n'
+            \end{aligned}
+        \end{equation}
+        
+        Sparing the details of the actual computation, $P(W) = 244/495 \approx 0.49$.
+    \end{solution}
+
+    \nextproblem
+
+    \begin{problem}
+        Suppose that 5 percent of men and 0.25 percent of women are color-blind. A color-blind person is chosen at random. What is the probability of this person being male? Assume that there are an equal number of males and females. 
+    \end{problem}
+
+    \begin{solution}
+        We are asked to find the probability a person is male, given they are color-blind. Denote this as $P(M | CB)$. Note that for a person to be colorblind, they must be either male or female.
+        \begin{align}
+            CB &= (CB \intersect M) \union (CB \intersect F) \\
+            P(CB) &= P(CB | M) P(M) + P(CB | W) P(W)
+        \end{align}
+        From definition of conditional probability it follows that
+        \begin{equation}
+            \begin{aligned}
+                P(M | CB) &= \frac{P(M \intersect CB)} {P(CB)} \\
+                          &= \frac{P(M \intersect CB)} {P(CB | M) P(M) + P(CB | W) P(W)} \\
+                P(M | CB) &= \frac{P(M \intersect CB)} {P(CB \intersect M) + P(CB \intersect W)}
+            \end{aligned}
+        \end{equation}
+        .
+        \begin{equation}
+            P(M | CB) = \frac{0.5} {0.05 + 0.0025} = \frac{20}{21} \approxeq 95\%
+        \end{equation}
+    \end{solution}
+
+    \nextproblem
+
+    \begin{problem}
+        A deck of 52 playing cards, containing all 4 aces, is randomly divided into 4 piles of 13 cards each. Define $E_i$ to be the event ``the $i$th pile has exactly one ace, ($i \in \set{1, 2, 3, 4}$).'' Determine $P(E_1 E_2 E_3 E_4)$, the probability each pile has an ace. 
+    \end{problem}
+
+    \begin{solution}
+        \begin{align*}
+            P(E_1 \intersect E_2 \intersect E_3 \intersect E_4) &= P(E_2 \intersect E_3 \intersect E_4 | E_1) P(E_1) \\
+            &= P(E_3 \intersect E_4 | E_1, E_2) P(E_2 | E_1) P(E_1) \\
+            &= P(E_4 | E_1, E_2, E_3) P(E_3 | E_1, E_2) P(E_2 | E_1) P(E_1)
+        \end{align*}
+        Note that if the first three piles each have exactly one ace, then the fourth pile is guaranteed to have an ace as well.
+        \begin{equation*}
+            P(E_4 | E_1, E_2, E_3) = 1
+        \end{equation*}
+
+        First consider $E_1$, the number of ways to choose one ace in a pile of 13 cards out of a full deck of 52 cards. There are $\binom{4}{1}$ ways to choose the ace card, and $\binom{48}{12}$ ways to choose the non-ace cards. The total number of ways to choose 13 out of 52 cards is $\binom{52}{13}$. We can summarize this as a probability.
+        \begin{equation*}
+            P(E_1) = \frac{\binom{4}{1}\binom{48}{12} } { \binom{52}{13} }
+        \end{equation*}
+
+        Now consider how $E_2$ looks, given that $E_1$ has occured. There are $\binom{3}{1}$ ways to choose the ace card. There are $\binom{36}{12}$ ways to choose the non-ace cards, and $\binom{39}{13}$ ways to generally pick 13 cards for the pile.
+        \begin{equation*}
+            P(E_2 | E_1) =  \frac{\binom{3}{1} \binom{36}{12}} {\binom{39}{13}}
+        \end{equation*}
+
+        Finally, $E_3$ given that $E_1, E_2$ have occured. Only two ways to pick the ace, and $\binom{24}{12}$ ways to choose the non-ace cards.
+        \begin{equation*}
+            P(E_3 | E_1, E_2) = \frac{\binom{2}{1} \binom{24}{12}} {\binom{26}{13}}
+        \end{equation*}
+
+        Multiplying the four probabilities above simplifies quite elegantly.
+        \begin{equation}
+            P(E_1 E_2 E_3 E_4) = P(E_4 | E_1, E_2, E_3) P(E_3 | E_1, E_2) P(E_2 | E_1) P(E_1) = \frac{39*26*13}{51*50*49} \approxeq 0.11
+        \end{equation}
+    \end{solution}
+
+    \newpage
+    %\nextproblem
+
+    \begin{problem}
+        If the occurrence of $B$ makes $A$ more likely, does the occurrence of $A$ make $B$ more likely?
+    \end{problem}
+
+    \begin{solution}
+        Yes. We aim to show
+        \begin{equation}
+            \text{if } P(A|B) > P(A), \text{ then } P(B | A) > P(B).
+            \label{eq:A_B}
+        \end{equation}
+        \begin{proof}
+            First apply Bayes thm.
+            \begin{align*}
+                P(A|B) &= \frac{P(A\intersect B)} {P(B)} \\
+                    &= \frac{P(B|A)P(A)} {P(B)}
+            \end{align*}    
+            Next apply the assumed relation.
+            \begin{align*}
+                P(A|B) &> P(A) \\
+                \frac{P(B|A) P(A)}{P(B)} &> P(A) \\
+                P(B|A) &> P(B)
+            \end{align*}
+            Thus we have shown \pref{eq:A_B}.
+        \end{proof}
+    \end{solution}
+
+    \nextproblem
+
+    \begin{problem}
+        Stores \A, \B{} and \C{} have 50, 75 and 100 employees, and, respectively, 50, 60, 70 percent of these are women. Resignations are equally likely  among all employees, regardless of sex. One employee resigns and this is a woman. What is the probability that she works in store \C?
+    \end{problem}
+    
+    \begin{solution}
+        We are asked to find $P(C | W)$, probability that a resigning employee worked at store $C$ given she is in $W$. 
+        \begin{align}
+            P(C | W) &= \frac{P(C \intersect W)} {P(W)} = \frac{P(C) P(W | C)} {P(W)}
+        \end{align}
+        We now can easily compute each part of the equation. $P(W)$ is 0.5, equal population of men and and women; $P(W | C)$ is given; $P(C)$ is the ratio of number of employees C has to the total number of employees across the three stores.
+        \begin{equation}
+            P(C | W) = \frac{0.7}{0.5} \frac{100}{225} \approxeq 0.62
+        \end{equation}
+    \end{solution}
+
+    %\nextproblem
+    \newpage
+
+    \begin{problem}
+        Three prisoners are informed by their jailer that one of them has been chosen at random to be executed, and the other two are to be freed. Prisoner \A{} asks the jailer to tell him privately which of this fellow prisoners will be set free, claiming that there would be no harm in divulging this information, since he already knows that at least will go free. The jailer refuses to answer this question, pointing out that if \A{} knew which of his fellows were to be set free, then his own probability of being executed would rise from $1/3$ to $1/2$, since he would then be one of two prisoners. What do you think of the jailer's reasoning?
+    \end{problem}
+    
+    \begin{solution}
+        The jailer's reasoning is correct. Let $A, B, C$ be the event that the respective prisoner is executed, and $P(\cdot)$ be the probability of the execution occurring. 
+
+        Initially in the eyes of prisoner $A$, all three events are equally likely to occur: $P(A) = 1/3$. However, suppose that the jailer tells prisoner $A$ that prisoner $B$ will \emph{not} be executed: event $\compl{B} = A \union C$. This is new information to prisoner $A$, his probability of being executed now changes to $P(A | \compl{B})$.
+        \begin{align*}
+            P(A | \compl{B}) &= \frac{P(A \intersect \compl{B})} {P(\compl{B})} 
+            = \frac{P(A \intersect (A \union C))} {P(A \union C)}
+        \end{align*}
+        Note that the events $A, B, C$ are disjoint; if one occurs, the other two will not occur. So $A \intersect (A \union C) = A$ and $A \intersect C = \emptyset$. With these observations, we find the probability of $A$ occurring given $B$ does not to increase to $1/2$.
+        \begin{align}
+            P(A | \compl{B}) &= \frac{P(A)} {P(A) + P(B)} = 1/2
+        \end{align}
+    \end{solution}
+
+    \nextproblem
+
+    \begin{problem}
+        Ordering a `deluxe' pizza means you have four choices from 15 available toppics. How many combinations are possible if:
+        \begin{enumerate}[label=(\alph*)]
+            \item toppings cannot be repeated?
+            \item toppings can be repeated?
+            \item toppings can be repeated and all combinations are equally likely, what is the probability that a customer chooses 4 different toppings?
+        \end{enumerate}
+    \end{problem}
+
+    \begin{solution}
+        \begin{enumerate}[label=(\alph*)]
+            \item If toppings \emph{cannot} be repeated, the number of combinations is $15*14*13*12/\factorial{4} = \binom{15}{4} = 1365$.
+            \item If toppings \emph{can} be repeated, the problem becomes unordered sampling with replacement. The number of combinations is given by $\binom{18}{4} = 3060$.
+            \item In order for the first four toppings to be distinct, we have $\binom{15}{4}$ choices. However to calculate the probability, we have to take into all possible combinations, distinct toppings or not. So the final probability that you choose 4 distinct toppings given replacement is $\frac{\binom{15}{4}}{\binom{18}{4}} = 91/204 \approx 0.45.$
+        \end{enumerate}
+    \end{solution}
+
+    \nextproblem
+
+    \begin{problem}
+        A deck of cards contains 10 red cards numbered 1 to 10, and 10 black cards numbered 1 to 10. (i) How many ways are there of arranging the 20 cards in a row? Suppose we draw the cards at random and lay them in a row. What is the probability that red and black cards alternate?
+    \end{problem}
+
+    \begin{solution}
+        (i) Each card is distinct, so the number of total permutations of the 20 cards is given by \factorial{20}.
+
+        (ii) There are two (2) valid configurations: black cards in odd spaces and white cards in even spaces and vice versa. For each of the two configurations, both card colors have \factorial{10} valid permutations. So the final probability is given by $(2*\factorial{10}*\factorial{10})/\factorial{20} = 1 / 92378$.
+    \end{solution}
+
+    \nextproblem
+
+    \begin{problem}
+        A lot of 100 items contains k defective items. M items are chosen at random and tested. What is the probability that m are found defective?
+    \end{problem}
+
+    \begin{solution}
+        There are $\binom{100}{M}$ ways to choose the the M items to test. There are $\binom{k}{m}$ ways to choose $m$ defective items out of the total $k$ that are defective. There are $\binom{100 - k}{M - k}$ ways to choose $M - k$ items out of the $100 - k$ items that are good. 
+
+        So the answer is 
+        \begin{equation}
+            P(m_{\text{defective}}) = \frac{\binom{k}{m} \binom{100 - k}{M - k}} {\binom{100}{M}}.
+        \end{equation} 
+    \end{solution}
+    
+\end{document}
