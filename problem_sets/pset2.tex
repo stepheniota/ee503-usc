@@ -1,0 +1,269 @@
+\documentclass{article}
+\usepackage{geometry}
+
+\def\nauthor{Stephen Iota}
+\def\nclass{ee 503 probability}
+\def\npset{Problem Set 2}
+\def\ndate{\today}
+\def\nemail{iota@usc.edu}
+\def\nthanks{SID: 6862013543}
+
+\include{header.tex}
+
+%%%%%%%%%%%%%
+%%% Begin %%%
+%%%%%%%%%%%%%
+\begin{document}
+
+    \makemytitle
+
+    \nextproblem
+    \nextproblem
+
+    \begin{problem}
+        Let $X$ be binomially distributed with parameters n and p. Show that as k goes from 0 to n, $P (X = k)$ increases monotonically, then decreases monotonically reaching its largest value 
+        \begin{enumerate}[label=(\alph*)]
+            \item in the case that $(n+1)p$ is an integer, when $k$ equals either $(n+1)p-1, (n+1)p$
+            \item in the case that $(n+1)p$ is not an integer, when $(n+1)p-1<k<(n+1)p$
+        \end{enumerate}
+    \end{problem}
+
+    \begin{solution}
+        Consider $P(X = k) / P(X = k - 1)$.
+        \begin{align*}
+            \frac{P(X = k)} { P(X = k - 1)} = \frac{\binom{n}{k}}{\binom{n}{k - 1}} \frac{p^k (1-p)^{n-k}} {p^{k-1} (1-p)^{n-k+1}} = \frac{(n - k + 1)}{k} \frac{p} {1-p}
+        \end{align*}
+
+        First, we'll consider the case that $(n+1)p$ is an integer value. We want to show that this ratio is greater than 1 at first; monotonically increasing, then it is less than 1 while it decreases after reaching its largest value.
+        \begin{align*}
+            \frac{(n - k + 1)}{k} \frac{p} {1-p} &\geq 1 \\
+            \frac{(n - k + 1)}{k} &\geq \frac {1-p} {p}
+        \end{align*}
+        We find that this expression reaches its highest value when $k$ is the largest integer less than or equal to $(n+1)p$. In otherwords, $P(X = k) / P(X = k - 1) \geq 1$ is true if and only if $k \leq (n+1)p$.
+
+        Now, if $(n+1)p$ is not an integer value, $k$ is still required to be an integer value. In this case, $P(X = k) / P(X = k - 1) \geq 1$ holds when $k \leq \left\lfloor{(n + 1)} \right \rfloor p$; where $\left \lfloor \cdot \right\rfloor$ represents the $floor(\cdot)$ operator.
+    \end{solution}
+
+
+    \nextproblem
+    \nextproblem
+    \begin{problem}
+        Suppose that an experiment can result in one of $r$ possible outcomes, the $i$th outcome having probability $P_i$, $i = 1, 2, \ldots, r, \sum_{i=1}^r p_i = 1$. If $n$ of these experiments are performed, and if the outcome of any one of the n does not affect the outcome of the other $n - 1$ experiments, then compute the probability that the first outcome appears $x_1$ times, the second $x_2$ times and the $r$th $x_r$ times, where $x_1+x_2+\cdots+x_r =n$.
+    \end{problem}
+
+    \begin{solution}
+        Let our sample space be $\Omega = \set{E_1, E_2, \ldots, E_r}$, where the probabilities of each event are $P(E_i) = p_i$ such that $P(E_i, E_j) = P(E_i)P(E_j)$ and $P(\Omega) = 1$.
+
+        Let $X_i$ be a r.v.~denoting the number of times $E_i$ occurs. 
+        \begin{gather*}
+            P(X_i = x_i) = P(\intersect_j^{x_i} E_i) = P_i^{x_i} \\
+            P(x_i, x_j) = P(\intersect_j^{x_i}E_i \intersect_k^{x_j}E_j) = P_i^{x_i} P_j^{x_j}
+        \end{gather*}
+        We are asked to find $P(\intersect_{i=1}^{r}X_i)$ such that $\sum_{i=i}^r x_i = n$.
+        \begin{equation}
+            P(\intersect_{i=1}^{r}X_i) = \prod_{i=1}^{r} P(X_i = x_i) = \prod_i^r P_i ^ {x_i}
+        \end{equation}
+    \end{solution}
+
+    \nextproblem
+    \nextproblem
+    \begin{problem}
+        Suppose that two teams A and B are playing a series of games, each of which is independently won by team A with probability p and by team B with probability $1 - p$. The winner of the series is the first team to win i games. If $i = 4$, find the probability that a total of 7 games are played. Also show that this probability is maximized when $p = 1/2$.
+    \end{problem}
+
+    \begin{solution}
+        Let $n$ denote the length of the series.
+        Notice the series-winning team must win the nth game, so this problem reduces into unordered sampling of the first $n - 1$ games. ``Sampling'' here denotes which of the first $n - 1$ games the series-winning team wins; a type of unordered sampling without replacement. 
+        
+        Let $X_i$ be a binomial r.v.~denoting the number of ways possible to win a first-to-$i$ series in $n$ games. $X_i = \set{i, i + 1, \ldots, 2i - 1}$.
+
+        Generally, we can write the probability of a series of length $n$ in a first-to-$i$ series as $P(X_i = n)$.
+        \begin{equation*}
+            P(X_i = n) = \binom{n - 1}{i - 1} (p^{i}(1-p)^{n - i} + p^{n - i}(1-p)^{i})
+        \end{equation*}
+        If $i = 4$, the probability of a 7 game series is given by $P(X_4 = 7)$.
+        \begin{equation}
+            P(X_4 = 7) = 20 (p^{4}(1-p)^{3} + p^{3}(1-p)^{4})
+        \end{equation}
+
+        We can show this probability is maximized when $p = 1/2$ by taking the derivative of $P(X_4 = 7)$ w.r.t $p$ and setting it to zero.
+        \begin{align*}
+            \dv{P}{p} = 20 \dv{p} (p^{4}(1-p)^{3} + p^{3}(1-p)^{4}) &= 0 \\
+            - 3p^4(1-p)^2 + 3p^2(1-p)^4 &= 0 \\
+            p^2 &= (1-p)^2  \\
+            p &= 1/2
+        \end{align*}
+        Note while taking the square root of a probability, we only consider the positive value. We can do a sanity check and ensure $\dv[2]{P}{p} > 0$ at $p = 1/2$, meaning this is indeed a maximum and not a minimum.
+
+        
+    \end{solution}
+
+
+    \nextproblem
+    \nextproblem
+    \begin{problem}
+        Consider $n$ independent flips of a coin having probability $p$ of landing heads. Say a changeover occurs whenever an outcome differs from the one preceding it. For instance, if the results of the flips are $H, H, T, H, T, H, H, T$, then there are a total of five changeovers. If $p = 1/2$, what is the probability there are $k$ changeovers?
+    \end{problem}
+
+    \begin{solution}
+        Let $X_k = \set{1, 2, \ldots, n - 1}$ be a discrete r.v.~that denotes the number of changeovers occuring during $n$ independent coinflips. We can model $X_k$ as binomial distributed r.v. There are $n - 1$ opportunities for a changeover during $n$ throws, since a changeover cannot occur as the first flip. Therefore we can think of $X_k$ as the way to sample $k$ unordered ``locations'' without replacement for the changeovers to occur.
+
+        Thus, the probability of $X_k$ is given by
+        \begin{equation}
+            P(X_k) = 
+            \begin{cases}
+                \binom{n - 1}{k} (p^k(1-p)^{n-k} + p^{n-k}(1-p)^k) & k \in [0, n - 1] \\
+                0 & \text{otherwise}
+            \end{cases}
+        \end{equation}
+        where we add the two probabilities together to account for the possibility of either starting with $H$ or $T$.
+
+        If $p = 1/2$, the probability there are $k$ changeovers is given by
+        \begin{equation}
+            P(X = k) = 2 \binom{n - 1}{k} (1/2)^n
+        \end{equation}
+        for valid values of $k$, $0$ otherwise.
+
+    \end{solution}
+
+    \nextproblem
+    \nextproblem
+    \begin{problem}
+        The number of orders waiting to be processed is given by a Poisson random variable with parameter $\alpha = \frac{\lambda} {n \mu}$, where $\lambda$ is the average number of orders that arrive in a day, $\mu$ is the number of orders that can be processed by an employee per day, and n is the number of employees. Let $ \lambda = 3$ and $\mu = 1$. Find the number of employees required so the probability that more than 4 orders are waiting is less than 0.9. What is the probability that there are no orders waiting?
+    \end{problem}
+
+    \begin{solution}
+        The probability of $i$ orders waiting to be processed is given by $P(X = i)$, where $X$ is a Poisson r.v. with mean $\alpha = \frac{\lambda} {n \mu}$.
+        \begin{equation*}
+            P(X = i) = \exp(-\alpha) \frac{\alpha^i} {i!}
+        \end{equation*}
+        We are asked to solve for $n$, given $\lambda, \mu$, such that $P(X > 4) < 0.9$.
+        \begin{align*}
+            P(X > 4) &< 0.9 \\
+            1 - P(X \leq 4) &< 0.9 \\
+            P(X \leq 4) &> 0.1
+        \end{align*}
+        $P(X \leq 4)$ is the PDF of the Poisson r.v., so we can compute this and solve for $n$.
+        \begin{align*}
+            \exp(-\alpha) \sum_{i = 0}^4 \frac{\alpha^i} {i!}  &> 0.1 \\
+            \exp(-\alpha) (1 + \alpha + \alpha^2/2 + \alpha^3/6 + \alpha^4/24) &> \\
+            \exp(-3/n) (1 + 3/n + 9/2n^2 + 9/2n^3 + 9/2n^4) &> 
+        \end{align*}
+        This is a difficult equation to solve analytically, however we remember that $n \in \set{0,1,2,\ldots}$, since it refers to number of employees. So we can solve this numerically/graphically, and find that 
+        \begin{equation}
+            P(X \leq 4) > 0.1 \quad \mathrm{ for } \quad n \geq 1. 
+        \end{equation}
+        The probability of no orders waiting is given by $P (X = 0)$.
+        \begin{equation}
+            P(X = 0) = \exp(-\lambda / n \mu)
+        \end{equation}
+    \end{solution}
+
+
+    \nextproblem
+    \nextproblem
+    \begin{problem}
+        The $r$th percentile, $\pi(r)$, of a random variable $X$ is defined by $P ( X \leq \pi(r)) = r/100$.
+        \begin{enumerate}[label=(\alph*)]
+            \item Find the 90, 95, and 99 percentiles of the exponential random variable with parameter $\lambda$.
+            \item Repeat part (a) for the Gaussian r.v. with params $m, \sigma$.
+        \end{enumerate}
+    \end{problem}
+    
+    \begin{solution}
+        First we consider $X \sim \exp(\lambda)$. For some $\lambda > 0$, let the PDF of $X$ be 
+        \begin{equation*}
+            f(x) = \begin{cases}
+                    \lambda e^{-\lambda x} & x \geq 0 \\
+                    0 & \mathrm{otherwise}
+                    \end{cases}
+        \end{equation*}
+        We can integrate this function to get its CDF $F$.
+        \begin{equation*}
+            F(a) = \int_0^a \lambda e^{-\lambda x} \dd{x} = 1 - e^{-\lambda a}
+        \end{equation*}
+        To find the $r$th percentile, we let $F(\pi(r)) = r/100$ and solve this equation for $\pi(r)$.
+        \begin{gather*}
+            1 - e^{-\lambda \percentile} = r/100 \\
+            \percentile = -\frac{1}{\lambda} \log(1 - r/100)
+        \end{gather*}
+        \begin{align}
+            \pi(90) &=  -\frac{1}{\lambda} \log(0.1) \\
+            \pi(95) &=  -\frac{1}{\lambda} \log(0.05) \\
+            \pi(99) &=  -\frac{1}{\lambda} \log(0.01)
+        \end{align}
+
+        Now, we will do the same for $X \sim G(\mu, \sigma)$. Let $f(x; \mu, \sigma)$ be the PDF of $X$. We are interested in evaluating the following expression for $r$.
+        \begin{equation*}
+            \int_{-\infty} ^{\percentile}  f(x; \mu, \sigma) \dd{x} = r/100
+        \end{equation*}
+        We can compute this using a lookup table. We can use the handy trick of $\percentile = \mu + Z\sigma$, where $Z$ is the CDF of the Gaussian, up to the desired interval.
+        \begin{align}
+            \pi(90) &=  \mu + 1.282\sigma\\
+            \pi(95) &=  \mu + 1.645\sigma \\
+            \pi(959 &=  \mu + 2.326\sigma
+        \end{align}
+                
+    \end{solution}
+
+
+    \nextproblem
+    \nextproblem
+    \begin{problem}
+        The entropy of a discrete random variable $X$, taking values in the finite set $\chi$, is denoted as $H(X)$ and is given by the following expression.
+        \begin{equation*}
+            H(X) = -\sum_{x \in \chi} P(X = x) \log_2 P(X = x)
+        \end{equation*}
+        \begin{enumerate}[label=(\alph*)]
+            \item Show that $H(X) \geq 0$.
+            \item Evaluate $H(X)$ when $X$ is uniformly distributed.
+        \end{enumerate}
+    \end{problem}
+
+    \begin{solution}
+        First we will show \textbf{(a)} that entropy is always nonnegative. Claim: $H(X) \geq 0$.
+        \begin{proof}
+            Suppose by way of contradiction that $H(X) < 0$. Then we can divide by the $-1$ and flip the inequality sign.
+            \begin{equation*}
+                \sum_{x \in \chi} P(X = x) \log_2 P(X = x) > 0
+            \end{equation*}
+            Since $X$ is a discrete r.v., its probability distribution must sum up to 1 and be nonnegative accross its domain. So we can say confidently that the first term is nonnegative; $0 \leq P(X = x) \leq 1 \quad \forall x \in \chi$. 
+            
+            Now consider the logarithm term, $\log_2 P(X = x)$. Its domain is defined by the possible values of $P(X = x) \in [0,1]$. The range of $\log$ over this domain is $(-\infty, 0]$. So for all possible probability values, the log term will be either zero or negative. A positive times a negative will always be negative. So our initial assumption is incorrect; $H(X) \geq 0$ must be true.
+        \end{proof}
+
+        Next, \textbf{(b)} we consider $X \sim \mathrm{Uniform}(n)$, where $|\chi| = n$, and evaluate $H(X)$.
+        \begin{align*}
+            H(X) &= -\sum_{x \in \chi} \frac{1}{n} \log_2{1/n} \\
+                 &= -\sum_{x \in \chi} \frac{1}{n} (\log{1} - \log{n}) \\
+                 &= \sum_{x \in \chi} \frac{1}{n} \log{n}
+        \end{align*}
+        Now, use the fact we are summing over $n$ different $x \in \chi$ each with same probability of occuring.
+        \begin{equation}
+            H(X) = \log_2{n}
+        \end{equation}
+    \end{solution}
+
+
+    %\nextproblem
+    %\nextproblem
+    %\begin{problem}
+    %    \textbf{\emph{Coin flip experiment}}: Use \emph{\texttt{random.uniform()}} to generate output [Heads, Tail] of a coin flip experiment.
+    %    \begin{enumerate}[label=(\alph*)]
+    %        \item 
+    %        Estimate the probability of heads in a fair coin flip by generating a lot of instances of experiment.
+    %        \item
+    %        Estimate the probability of heads in a biased coin flip with a bias of 0.8, and find the number of heads and tails in a random experiment.
+    %        \item
+    %        Plot/Display estimate as a function of number of experiments (n) and argue how do you decide how many times you need to repeat the experiment to get a good estimate.
+    %    \end{enumerate}
+    %\end{problem}
+
+    %\begin{solution}
+    %    \textbf{(a)} The estimated probability of heads in a fair coin flip is $1/2$.
+    %\end{solution}
+
+
+
+    
+\end{document}
