@@ -1,0 +1,264 @@
+\documentclass{article}
+\usepackage{geometry}
+
+\def\nauthor{Stephen Iota}
+\def\nclass{ee503 probability}
+\def\npset{Problem Set 3}
+\def\ndate{\today}
+\def\nemail{iota@usc.edu}
+\def\nthanks{SID: 6862013543}
+
+\include{header.tex}
+
+\newcommand{\sig}[0]{\text{signal}}
+\newcommand{\nosig}[0]{\text{no signal}}
+
+%%%%%%%%%%%%%
+%%% Begin %%%
+%%%%%%%%%%%%%
+\begin{document}
+
+    \makemytitle
+
+    \nextproblem
+    \nextproblem
+
+    \begin{problem}
+        An urn contains $n + m$ balls, of which $n$ are red and $m$ are black. They are drawn from the urn one at a time, without replacement. Let $X$ be the number of red balls removed before the first black ball is chosen. We are interested in determining $\expect[X]$. To obtain this quantity, number the red balls from 1 to $n$. Now define the random variables $X_i, i = 1, 2, \ldots, n$, by 
+        \begin{equation*}
+            X_i = 
+                \begin{cases}
+                    1 & \text{if red ball $i$ is taken before any black ball is chosen} \\
+                    0 & \text{otherwise}    
+                \end{cases}
+        \end{equation*}
+        \begin{enumerate}
+            \item[(a)] Express X in terms of $X_i$. 
+            \item[(b)]  Find $\expect[X]$.
+        \end{enumerate}
+    \end{problem}
+
+
+    \begin{solution}
+        We can rewrite r.v.~$X$ in terms of individual $X_i$'s as follows.
+        \begin{equation}
+            X = \sum_{i=1}^n X_i
+        \end{equation}
+
+        Next we use this to find the expectation of $X$, $\expect[X]$.
+        \begin{equation*}
+            \E[X] = \sum_{i=1}^n 1\P(X_i = 1) +  0\P(X_i = 0)
+        \end{equation*}
+
+        Consider the $i$th red ball. Since the balls are numbered, each one is distinguishable. Moreover, $i$'s probability of being picked before any black ball does not depend on how many other red balls are chosen before or after, only on the number of black balls in the urn.
+        \begin{equation*}
+            \P(X_i = 1) = \frac{1} {m + 1}
+        \end{equation*}
+
+        Now we can solve for the expectation value.
+        \begin{align}
+            \begin{aligned}
+            \E[X] &= \sum_{i = 1}^{n} \frac{1} {m + 1} = \frac{n}{m + 1} 
+            \end{aligned}
+        \end{align}
+    \end{solution}
+
+
+    \nextproblem
+
+    \begin{problem}
+        Let $X$ be uniformly distributed r.v.~in the interval $[-\pi, \pi]$. What is the CDF of $Y = \tan{X}$?
+    \end{problem}
+
+    \begin{solution}
+        Let $F_Y(x)$ be the CDF of $Y$. We will make use of the inverse transformation theorem, that says we can map any r.v.~ $Z$ to the uniform r.v. $U(0,1)$ via its CDF; $Z = F^{-1}_X(U)$.
+        The CDF of $X$ is given by $F_X(x) = 1/2\pi x + 1/2$.
+
+        Note that due to $\tan{x}$'s periodicity, $X$'s range runs over two periods of $Y$'s dependence on $X$. So the CDF of $Y$ over $X \in [-\pi, \pi]$ will be the same as over $X \in [-\pi/2, \pi/2]$. So we can rewrite CDF of $X$ as $F_X(x) = 1/\pi x + 1/2$.
+        \begin{align*}
+            F_Y(x) &= P(Y \leq x) \\
+            &= P(\tan{X} \leq x) \\
+            &= P(\tan{F^{-1}_X(U)} \leq x) \\
+            &= P(F^{-1}_X(U) \leq \arctan{x}) \\
+            &= P(U \leq F_X(\arctan{x})) \\
+            &= F_U(F_X(\arctan{x}) \\
+            &= F_X(\arctan{x})
+        \end{align*}
+        \begin{equation}
+            F_Y(x) = \frac{1}{\pi} \arctan{x} + \frac{1} {2}
+        \end{equation}
+        
+    \end{solution}
+
+
+    \nextproblem
+    \begin{problem}
+        If $X \sim \mathcal{N}(\mu, \sigma)$, what is the PDF of $Y = (X - \mu)^2 / \sigma^2$?
+    \end{problem}
+
+    \begin{solution}
+        We will start by solving for the CDF of $Y, F_Y(x)$, then differenciate w.r.t $x$ to find the PDF; $\dv*{F_Y(x)}{x} = f_Y(x)$. Note that the CDF of $X$ is a normalized Gaussian distribution.
+        \begin{align*}
+            F_Y(x) &= P(Y \leq x) \\
+            &= P((X-\mu)^2/\sigma^2 \leq x) \\
+            &= P(0 \leq X \leq \sigma \sqrt{x} + \mu)  \\
+            &= P(0 \leq U \leq F_X(\sigma \sqrt{x} + \mu)) \\
+            &= F_X(\sigma \sqrt{x} + \mu) \quad \text{ if } x \geq 0 \text{ else } 0
+        \end{align*}
+
+        \begin{align*}
+            f_Y(x) &= 
+            \begin{cases} 
+                    f_X(\sigma \sqrt{x} + \mu) & x \geq 0 \\
+                    0 & \text{otherwise}\\
+            \end{cases} \\
+            &= C\exp(-\frac{1}{2} x)
+        \end{align*}
+
+        We notice this is the exponential r.v.~distribution. The prefactor can be found by normalizing the PDF across its domain.
+
+        \begin{equation}
+            f_Y(x) = 
+            \begin{cases}
+                \frac{1}{2}\exp(-\frac{1}{2} x) & 0 \leq x \leq \infty \\
+                0 & \text{otherwise} 
+            \end{cases}
+        \end{equation}
+        
+    \end{solution}
+
+    \nextproblem
+    \begin{problem}
+        A Cauchy random variable X has the following pdf
+        \begin{equation*}
+            f_X(x) = \frac{\alpha} {\pi (x^2 + \alpha^2)}, \quad -\infty < x < \infty, \alpha > 0
+        \end{equation*}
+        Find $E[X]$ and $E[X^2]$. Suppose a r.v.~X had a characteristic function $\phi(\omega) = e^{-|\omega|}$, what is its mean and variance?
+    \end{problem}
+
+    \begin{solution}
+        First we find the expectation value of the Cauchy r.v.
+
+        \begin{align*}
+            E[X] &= \int_{-\infty}^{\infty} x f_X(x) \dd{x} \\
+            &= \frac{\alpha}{\pi} \lim_{a \to \infty} \int_{-a}^{a} \frac{x}{x^2 + \alpha^2} \dd{x}\\
+            &= \frac{1}{2\pi} \lim_{a \to \infty} \int_{-a}^{a} \frac{1}{u} \dd{u} && u = x^2 + \alpha^2 \\
+            &= \frac{1}{2\pi} \lim_{a \to \infty} \ln{u}\eval^{a}_{-a}
+        \end{align*}
+        It turns out this this integral is defined to be zero; it is the Cauchy Principle Value of the expectation. However, this cannot be used to say that the mean of the Cauchy random variable is 0. The mean is defined as the value of the integral in the usual sense and not in the principal value sense.
+        \begin{equation}
+            E[X] = \text{ undefined }
+        \end{equation}
+
+        Next we evaluate the second moment of the expectation value.
+
+        \begin{align*}
+            E[X^2] &= \int_{-\infty}^{\infty} x^2 f_X(x) \dd{x} \\
+            &= \frac{\alpha}{\pi} \int_{-\infty}^{\infty} \frac{x^2}{x^2 + \alpha^2} \dd{x} \\
+            &= \frac{\alpha}{\pi} \quantity(\int_{-\infty}^{\infty} \dd{x} - \int_{-\infty}^{\infty} \dd{x} \frac{\alpha^2}{x^2 + \alpha^2})
+        \end{align*}
+        The second integration term is the well known integral evaluating to $\arctan$, which is finite over the integration space. However the first term, the integral of a constant, blows up to infinity. Therefore the final answer is undefined.
+        \begin{equation}
+            E[X^2] = \text{ undefined }
+        \end{equation}
+
+    \end{solution}
+
+    \nextproblem
+    \begin{problem}
+        Three types of customers arrive at a service station. The times required to service type 1 and type 2 customers are exponential random variables with respective means 1 and 10 seconds. Type 3 customers require a constant service time of 2 seconds. Suppose that the proportion of type 1, 2 and 3 customers is $1/2, 1/8 , 3/8$, respectively. Find the probability that an arbitrary customer requires more than 15 seconds of service time.
+    \end{problem}
+
+    \begin{solution}
+        Let $C = \set{c_1, c_2, c_3}$ be a r.v.~denoting the type of customer arriving. Let $X$ be a r.v.~denoting the service for a customer. We are given $X | C = c_1 \sim \exp(\lambda=1), \ X | C = c_2 \sim \exp(\lambda=1/10), \ X | C = c_3 \sim Const(2)$, as well as $P(C = c_i)$ for each customer type.
+
+        We would like to find $P(X > 15)$.
+        \begin{align*}
+            P(X > 15) &= 1 - P(X \leq 15) \\
+            P(X \leq 15) &= P(X \leq 15, C = c_1) + P(X \leq 15, C = c_2) + P(X \leq 15, C = c_3) \\
+            &= P(X \leq 15|c_1)P(c_1) + P(X \leq 15|c_2)P(c_2) + P(X \leq 15|c_3)P(c_3)
+        \end{align*}
+        The CDF of an exponential r.v. is given by $1 - \exp(-\lambda x)$, and for a constant r.v. is a step function $H(x = C)$.
+        \begin{align*}
+            P(X \leq 15) &= 1/2(1 - \exp(-15)) + 1/8(1 - \exp(-3/2)) + 3/8 \\
+            &= 1 - 1/2e^{-15} - 1/8e^{-3/2}
+        \end{align*}
+        \begin{equation}
+            P(X > 15) = 1/2 \exp(-15) - 1/8 \exp(-3/2)
+        \end{equation}
+        
+    \end{solution}
+
+    \nextproblem
+    \begin{problem}
+        The average score in the final exam of a course in 65 and the standard deviation is 10. (a) Give an upperbound on the probability of a student scoring more than 95? (b) Suppose the scores follow a normal distribution.Compute the probability of a student scoring more than 95 and compare it to the bound obtained in (a).
+    \end{problem}
+
+    \begin{solution}
+        \begin{itemize}
+            \item[(a)] We can use Chebyshev's inequality to get an upperbound strictly from the mean and variance. 
+            \begin{equation*}
+                P(|X - \mu| \geq k) \leq \frac{\sigma^2}{k^2}
+            \end{equation*}
+            \begin{equation}
+                P(X \geq 95) = 1/2P(|X - 65| \geq 30) \leq \frac{10^2}{2\cdot 35^2} = 2/49
+            \end{equation}
+
+            \item[(b)] Now, if the distribution from part (a) were a Gaussian, we can look up the probability of a score of 95+ with a mean and std of 65 and 10 respectively.
+
+            If the distribution were a Gaussian, there would be a probability of $0.00135$ of getting a 95 or higher. This is definitely within the upperbound found in part (a).
+        \end{itemize}
+        
+    \end{solution}
+
+    \nextproblem
+    \begin{problem}
+        The number $X$ of electrons counted by a receiver in an optical communication system is a Poisson random variable with rate $\lambda_1$ when a signal is present and with rate $\lambda_0 < \lambda_1$ when a signal is absent. Suppose that a signal is present with probability $p$. 
+
+        \begin{enumerate}
+            \item[(a)] Find $P[signal|X = k]$ and $P[no signal|X = k]$.
+            \item[(b)] The receiver uses the following decision rule. If $P[signal|X = k] > P[no signal|X = k]$, decide signal, otherwise decide no signal. Show that this decision rule leads to the following threshold rule: If $X > T$, decide signal, otherwise decide no signal.
+            \item[(c)] What is the probability of error for the above decision rule?
+        \end{enumerate}
+    \end{problem}
+
+    \begin{solution}
+        \begin{enumerate}
+            \item[(a)] \begin{align*}
+                P(\sig | X  = k) &= P(\sig, X = k)/P(X = k) = \frac{P(\sig)}{P(X = k)} P(X = k | \sig) \\
+                &= \frac{P(\sig)P(X = k | \sig)}{P(X = k | \sig) + P(X = k | \nosig)}
+            \end{align*}
+            \begin{equation}
+                P(\sig | X  = k) = \frac{p e^{-\lambda_1} \lambda_1^k}{e^{-\lambda_1} \lambda_1^k + e^{-\lambda_0} \lambda_0^k}
+            \end{equation}
+            Similarly for the case of no signal.
+            \begin{equation*}
+                P(\nosig | X = k) = \frac{(1-p) e^{-\lambda_0} \lambda_0^k}{e^{-\lambda_1} \lambda_1^k + e^{-\lambda_0} \lambda_0^k}
+            \end{equation*}
+            \item[(b)] We want to solve the inequality $P[signal|X = k] > P[no signal|X = k]$ for $X$, and show that above a certain threshold this decision rule holds.
+            \begin{gather*}
+                p e^{-\lambda_1} \lambda_1^x > (1-p)e^{-\lambda_0} \lambda_0^x \\
+                \log{p} - \lambda_1 + x \log{\lambda_1} > \log(1-p) - \lambda_0 + x\log{\lambda_0} \\
+                x \log{\lambda_1} - x \log{\lambda_0} > \log(1-p) - \log(p) + \lambda_1 - \lambda_0 \\
+                x > \frac{\log((1-p)/p) + \Delta\lambda} {\log{\lambda_1 / \lambda_0}}
+            \end{gather*}
+            \begin{equation}
+                T = \frac{\log((1-p)/p) + \Delta\lambda} {\log{\lambda_1 / \lambda_0}}
+            \end{equation}
+
+            \item[(c)] There are two possible instances of error, false positive and false negative. A false positive represents a scenario where $X > T$ but there is no signal, whereas a false negative is where $X \leq T$ but there is signal.
+            \begin{align*}
+                P(error) &= P(\sig, X \leq T) + P(\nosig, X > T) \\
+                &= P(X \leq T | \sig)P(\sig) + P(X > T | \nosig)P(\nosig) \\
+            \end{align*}
+            \begin{equation}
+                P(error) = pe^{-\lambda_1} \sum_{i=1}^T \frac{\lambda_1^i}{i!} + (1-p)e^{-\lambda_0} \sum_{i=T+1}^{\infty} \frac{\lambda_0^i}{i!}
+            \end{equation}
+        \end{enumerate}
+    \end{solution}
+
+    
+
+
+    
+\end{document}
