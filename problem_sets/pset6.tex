@@ -1,0 +1,114 @@
+\documentclass{article}
+\usepackage{geometry}
+
+\def\nauthor{Stephen Iota}
+\def\nclass{ee503 probability}
+\def\npset{Problem Set 6}
+\def\ndate{\today}
+\def\nemail{iota@usc.edu}
+\def\nthanks{SID: 6862013543}
+
+\include{header.tex}
+
+
+%%%%%%%%%%%%%
+%%% Begin %%%
+%%%%%%%%%%%%%
+\begin{document}
+
+    \makemytitle
+
+    \nextproblem
+    \nextproblem
+
+    \begin{problem}
+        An important manufacturing process produces cylindrical component parts for the automotive industry. It is important that the process produce parts having a mean diameter of $5$ mm. The engineer involved conjectures that the population mean is $5.0$ mm. An experiment is conducted in which $100$ parts produced by the process are selected randomly and the diameter measured on each. It is known that the population standard deviation $\sigma = 0.1$. The experiment indicates a sample average diameter $x = 5.027$ mm. Does this sample information appear to support or refute the engineer’s conjecture
+    \end{problem}
+
+    \begin{solution}
+        For a random sample $x_1, x_2, \ldots, x_n$, the sample mean is given by $M_n = \frac{1}{n}\sum_i^n x_i$. Since the population variance is known, we can construct a confidence interval to see how well the sample mean represents the population mean, $m \in [M_n \mp \frac{\sigma y_{\alpha/2}}{\sqrt{n}}]$.
+
+        Using a lookup table, it can be shown that
+        \begin{equation}
+            m = 5.027 \pm 0.02576 \text{ mm with } 99\% \text{ probability}.
+        \end{equation}
+        So our sample mean is not even in the $99\%$ confidence interval. Therefore our estimated population mean of $5.0$ mm is likely incorrect, and the true mean is likely much higher.
+    \end{solution}
+
+    \nextproblem
+
+    \begin{problem}
+        A random variable $X$ is believed to be uniformly distributed in the interval $[0,a]$, where $a$ is unknown. Derive the maximum likelihood estimate, $\hat{a}$, of $a$ from $n$ independent observations of $X$ labelled $X_1, \ldots, X_n$. Find the mean and variance of $\hat{a}$ and explain why it is a good estimate when n is large.
+    \end{problem}
+
+    \begin{solution}
+    The pdf of the r.v. $X$ is given by
+    \begin{equation*}
+        f_{X|a}(x|a) = \begin{cases}
+                        1/a & \text{for } x \in [0, a] \\
+                        0 & \text{else}
+                        \end{cases}
+    \end{equation*}
+    Therefore, the likelihood function $l$ is
+    \begin{equation}
+        l(\{X_i\}_n; a) = \begin{cases} 
+        \frac{1}{a^n} & \text{ if } X_i \leq a \quad \forall X_i \in \{X_i\}_n \\
+        0 & \text{ else}
+        \end{cases}
+    \end{equation}
+    $l$ is an ever-decreasing function of $a$; its minimum w.r.t.~$a$ is in the limit towards infinity.
+    Thus, it is clear that the value of $a$ which maximizes the likelihood function can by any $a$ such that
+    \begin{equation}
+        a \geq \max(X_i, \ldots, X_n)
+    \end{equation}
+    , otherwise the likelihood function would be zero.
+    \end{solution}
+
+    \nextproblem
+
+    \begin{problem}
+        A communication channel accepts as input either $000$ or $111$. The channel transmits each bit ($0$ or $1$) correctly with probability $1 - p$ and erroneously with probability $p$. Find the entropy of the input given that the output is $010$.
+    \end{problem}
+
+    \begin{solution}
+        We are asked to find the entropy of the input $X$ given the output $Y = (010)$.
+        \begin{align}
+            H(X|Y=010) = -(p_X(000|010) \log p_X(000|010) + p_X(111|010) \log{p_X(111|010)})
+        \end{align}
+        where $p_X(000|010) = \frac{p(1-p)^2}{p(1-p)^2 + p^2(1-p)}$ and $p_X(111|010) = \frac{p^2(1-p)}{p(1-p)^2 +  p^2(1-p)}$.
+    \end{solution}
+
+    \nextproblem
+
+    \begin{problem}
+        A transmitter generates a set of messages $m \in \set{1, 2, 3, 4, 5, 6, 7, 8}$ with probabilities $\set{1/4, 1/4, 1/8, 1/8, 1/8, 1/16, 1/32, 1/32}$, respectively.
+        \begin{enumerate}
+            \item[(a)] What is the entropy of $m$?
+            \item[(b)] For binary transmission, $n$ distinct messages can be represented using $\ceil{\log_2{n}}$ bits. E.g., the 8 messages in m can be represented uniquely using 3 bits with the following mapping $\set{1, 2, 3, 4, 5, 6, 7, 8} \rightarrow \set{001, 010, 011, 100, 101, 110, 111, 000}$. Such a mapping is called a \emph{code} and each 3-bit representation of a message is called a \emph{codeword}.  For the above code, the average length of a codeword is 3 bits since each codeword is 3 bits long. Can you design another code for m such that the average length of a codeword is equal to the entropy of m?
+        \end{enumerate}
+    \end{problem}
+
+    \begin{solution}
+        The entropy of some r.v.~$X$ is given by
+        \begin{equation*}
+            H(X) = -\sum_{x \in X}p_X(x) \log(p_X(x))
+        \end{equation*}
+    \end{solution}
+    Considering the set of messages, the entropy of $m$ is equal to $\boxed{H(m) = 43/16 = 2 + 11/16}$.
+
+    We can make a code whose average length is equal to $H(m)$ by the following. Let $n_i$ be the number of bits needed to represent message $m_i$.
+    \begin{equation}
+        n_i = \log{1/p_i}
+    \end{equation}
+    From here, it is easy to see the average number of bits needed is equal to $H(m)$.
+    \begin{align*}
+        E[n] &= E[\log{1/p_i}] \\
+        &= \sum_i p_i \log{1/p_i} \\
+        &= -\sum_i p_i \log{p_i} \\
+        &= H(m)
+    \end{align*}
+
+
+
+\end{document}
+utu
