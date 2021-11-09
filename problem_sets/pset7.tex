@@ -1,0 +1,281 @@
+\documentclass{article}
+\usepackage{geometry}
+
+\def\nauthor{Stephen Iota}
+\def\nclass{ee503 probability}
+\def\npset{Problem Set 7}
+\def\ndate{\today}
+\def\nemail{iota@usc.edu}
+\def\nthanks{SID: 6862013543}
+
+\include{header.tex}
+
+\usepackage{dsfont}
+\newcommand{\one}[0]{\ensuremath{\mathds{1}}}
+\newcommand{\I}[0]{\ensuremath{\mathbb{I}}}
+
+%%%%%%%%%%%%%
+%%% Begin %%%
+%%%%%%%%%%%%%
+\begin{document}
+
+    \makemytitle
+
+    \nextproblem
+    \nextproblem
+
+    \begin{problem}
+        Suppose that whether or not it rains today depends on previous weather conditions through the last three days. Show how this system may be analyzed by using a Markov Chain. How many states are needed?
+    \end{problem}
+
+    \begin{solution}
+        We can model this as a stochastic process $\set{X_n, n=0,1,2,\ldots}$, where $X_n$ denotes the state of the system on day $n$. More specifically, the state of the system at day $n$ depends on the weather pattern on days $n-1, n-2, n-3$. Let $O$ denote no rain and $1$ denote rain, then we can define the state space as follows: $X_n \in S = \set{000,001, 010, \ldots, 111}; |S| = 2^3$.
+
+        Once we've defined the state space in this way, the state-transition probability
+        \begin{equation}
+            P(X_n = j | X_{n-1} = i, X_{n-2} = i_{n-2}, \ldots, X_0 = {i_0}) = P_{ij}
+        \end{equation}
+        , the probability that the system will be in state $j \in S$ on day $n$ given its previous history, depends only the state $i \in S$ of the system on day $n-1$. So the system becomes a Markov Chain.
+
+        There are 8 possible states of the system, however not all state transitions will always be possible, e.g.~if $X_n = (000)$, then the system cannot transition to $X_{n+1} = (101)$. Note also we must specify an initial distribution of the states on the first three days.
+        
+    \end{solution}
+
+    \nextproblem
+
+    \begin{problem}
+        Consider a process $\set{X_n, n=0,1,\ldots}$, which takes on the values $S = \set{0,1,2}$. Suppose
+        \begin{equation*}
+            P\set{X_{n+1}=j|X_n=i,\ldots,X_0=i_0} = \begin{cases}
+                P^I_{ij} & \text{when $n$ is even} \\
+                P^{II}_{ij} & \text{when $n$ is odd}
+            \end{cases}
+        \end{equation*}
+        where $\sum P^I_{ij} = \sum P^{II}_{ij} = 1$. Is $\set{X_n, n=0,1,\ldots}$ a time-homogeneous Markov chain? If not, then show how, by enlarging the state space, we may transform it into a time-homogeneous Markov chain.
+    \end{problem}
+
+    \begin{solution}
+        The process is not a time-homogeneous Markov chain because the state-transition probability is not independent of $n$. We can define a new state space $S' = \set{0, 1, 2, 0', 1', 2'}$, where
+        \begin{align*}
+            i &\in \set{0, 1, 2} \rightarrow n \text{ is even} \\
+            i &\in \set{0', 1', 2'} \rightarrow n \text{ is odd} 
+        \end{align*}
+        In the new transition matrix $P'$, the upper right corner corresponds to $P^I$, the lower left corner is $P^{II}$, and the upper left and lower right corners are all 0.
+        \begin{equation*}
+            P' = \colvec{0 & P^I \\ P^{II} & 0}
+        \end{equation*}
+    \end{solution}
+
+    \nextproblem
+
+    \begin{problem}
+        Let the transition probability matrix of a two-state Markov Chain be given by
+        \begin{equation}
+            P = \colvec{p & 1 - p \\ 1 - p & p}.
+            \label{eq:P}
+        \end{equation}
+        Show by mathematical induction that
+        \begin{equation}
+            P^{(n)} = \colvec{1/2 + 1/2(2p - 1)^n & 1/2 - 1/2(2p - 1)^n \\ 1/2 - 1/2(2p - 1)^n & 1/2 + 1/2(2p - 1)^n}. \label{eq:P_n}
+        \end{equation}
+    \end{problem}
+
+    \begin{solution}
+        Claim: eq.~\pref{eq:P_n} holds for $n = 0, 1, 2, \ldots$.
+        \begin{proof}
+            By induction on $n$.
+
+            Base case: Let $n = 0$. Then it is trivial to show that by letting $n = 0$ in eq.~\pref{eq:P_n}, $P^{(0)} = \mathbb{I}$. It is a well known property that any matrix raised to the zeroth power is equal to the identity matrix, so raising eq.~\pref{eq:P} to the zeroth power is no exception.
+
+            Inductive step: assume eq.~\pref{eq:P_n} holds for $n - 1$. That is,
+            \begin{equation*}
+                P^{(n-1)} = \colvec{1/2 + 1/2(2p - 1)^{n-1} & 1/2 - 1/2(2p - 1)^{n-1} \\ 1/2 - 1/2(2p - 1)^{n-1} & 1/2 + 1/2(2p - 1)^{n-1}}
+            \end{equation*}
+            Consider the result of the following matrix multiplication. 
+            \begin{equation*}
+                P^n = P^{(n-1)}P^1 =  \colvec{1/2 + 1/2(2p - 1)^{n-1} & 1/2 - 1/2(2p - 1)^{n-1} \\ 1/2 - 1/2(2p - 1)^{n-1} & 1/2 + 1/2(2p - 1)^{n-1}} \colvec{p & 1 - p \\ 1 - p & p}
+            \end{equation*}
+            The diagonals are found by the following:
+            \begin{align*}
+                &= 1/2p + 1/2p(2p-1)^{n-1} + (1-p)(1/2 - 1/2(2p-1)^{n-1}) \\
+                &= 1/2p + 1/2p(2p - 1)^{n-1} + 1/2 - 1/2(1-p)(2p-1)^{n-1} \\
+                &=  1/2 + 1/2(2p+1)(2p-1)^{n-1} \\
+                &= 1/2 + 1/2(2p - 1)^n
+            \end{align*}
+            Similarly, the off diagonals evaluate to:
+            \begin{align*}
+                &= 1/2(p-1) + 1/2(1-p)(2p-1)^{n-1} + 1/2p - 1/2p(2p-1)^{n-1} \\
+                &= 1/2 + 1/2(1-p)(2p-1)^{n-1} - 1/2p(2p-1)^{n-1} \\
+                &= 1/2 + 1/2(1 - 2p)(2p-1)^{n-1} \\
+                &= 1/2 - 1/2(2p-1)^{n}
+            \end{align*}
+            So we have shown that given $P^{(n-1)}$, $P^{(n)} = P^{(n-1)}P$.
+
+            So it follows by induction that eq.~\pref{eq:P_n} holds for all nonnegative $n$.
+        \end{proof}
+    \end{solution}
+
+    \nextproblem
+
+    \begin{problem}
+        Suppose that coin $1$ has probability $0.7$ of coming up heads, and coin $2$ has probability $0.6$ of coming up heads. If the coin flipped today comes up heads, then we select coin $1$ to flip tomorrow, and if it comes tails, then we select coin $2$ to flilp tomorrow. If the coin initially flipped is equally likely to be coin $1$ or coin $2$, then what is the probability that the coin flipped on the third day after the initial flilp is coin $1$? Suppose the coin flipped Monday comes up heads. What is the probability that the coin flipped on Friday of the same week also comes up heads?
+    \end{problem}
+
+    \begin{solution}
+        We can model this as a stochastic process, where $X_n \in S$ is the state of the system on the $n$th day. Let the state space be the two coins, $S = \set{C_1, C_2}$. This is a Markov chain, as the probability of $X_n = C_i$ depends only on the state of $X_{n-1}$.
+
+        Let $0$ denote the index for $C_1$, and $1$ for $C_2$, e.g.~flipping coin 1 and landing heads is equal to transition $P_{00}$. The state transition matrix $\vb{P}$ is given by
+        \begin{equation}
+            \vb{P} = \colvec{0.7 & 0.3 \\ 0.6 & 0.4}
+        \end{equation}
+
+        If coin 1 is flipped on the first day, the probability of coin 1 being flipped on the third day after the flip is given by
+        \begin{equation}
+            P\set{X_3 = C_1 | X_0 = C_0} = (\vb{P}^3)_{00} = 0.667.
+        \end{equation}
+
+        If it is known that the coin flipped on Monday turned out heads, we know coin 1 was flipped on Tuesday. Similarly if we want Friday's coin flip to be heads, we can look for the probability coin 1 is flipped on Saturday. Therefore the probability Friday's coin flip is heads given Monday's coin flip was heads is equivalent to asking the probability Saturday is coin 1 given Tuesday is coin 1.
+        \begin{equation}
+            P\set{X_{n+5}=C_1|X_{n} =C_1} = (\vb{P}^5)_{00} = 0.66667.
+        \end{equation}
+    \end{solution}
+
+    \nextproblem
+
+    \begin{problem}
+        Specify the classes of the following Markov chains, and determine if they are transient or recurrent. 
+    \end{problem}
+
+    \begin{solution}
+        \begin{equation*}
+            P_1 = \colvec{0 & 1/2 & 1/2 \\ 1/2 & 0 & 1/2 \\ 1/2 & 1/2 & 0}
+        \end{equation*}
+        All states communicate with each other, only one class. Furthermore, for each state $i$, the process with revisit state $i$ infinitely often. More precisely, $\sum_{n=0}^\infty P_{ii}^{(n)} = \infty$.
+
+        \begin{equation*}
+            P_2 = \colvec{0 & 0 & 0 & 1 \\ 0 & 0 & 0 & 1 \\ 1/2 & 1/2 & 0 & 0 \\ 0 & 0 & 1 & 0}
+        \end{equation*}
+        All states communicate with each other, only one class. All states are also recurrent as well, as all states of a finite irreducible Markov chain are recurrent.
+        \begin{equation*}
+            P_3 = \colvec{1/2 & 0 & 1/2 & 0 & 0 \\
+                          1/4 & 1/2 & 1/4 & 0 & 0 \\
+                          1/2 & 0 & 1/2 & 0 & 0 \\
+                          0 & 0 & 0 & 1/2 & 1/2 \\
+                          0 & 0 & 0 & 1/2 & 1/2 \\}           
+        \end{equation*}
+        There are two classes that communicate with themselves, $\set{0, 1, 2}$ and $\set{3, 4}$. Both classes are recurrent.
+        \begin{equation*}
+            P_4 = \colvec{1/4 & 3/4 & 0 & 0 & 0 \\
+                          1/2 & 1/2 & 0 & 0 & 0 \\
+                          0 & 0 & 1 & 0 & 0 \\
+                          0 & 0 & 0 & 1/3 & 2/3 \\
+                          1 & 0 & 0 & 0 & 0 \\}
+        \end{equation*}
+        There are four classes, $\set{0, 1}, \set{2}, \set{3}, \set{4}$. Classes $\set{0, 1}, \set{2}$ are recurrent, whereas classes $\set{3}$ and $\set{4}$ are transient; there is a finite probability of never returning to those states.
+    \end{solution}
+
+    \nextproblem
+
+    \begin{problem}
+        Coin $1$ comes up heads with probability $0.6$ and coin $2$ with probability $0.5$. A coin is continually flipped until it comes up tails, at which time that coin is put aside and we start flipping the other one.
+        \begin{enumerate}
+            \item[(a)] What is the proportion of flips use coin $1$?
+            \item[(b)] If we start the process with coin $1$ what is the probability that coin $2$ is used on the fifth flip?
+        \end{enumerate}
+    \end{problem}
+
+    \begin{solution}
+        We can model this process as a Markov chain $\set{X_n, n=0,1,\ldots}$ with state $i \in \set{0, 1}$, where state $0$: flipping coin 1, state $1$: flipping coin $2$, and state transition matrix
+        \begin{equation*}
+            P = \colvec{0.6 & 0.4 \\ 0.5 & 0.5}.
+        \end{equation*}
+        (a) The proportion of flips using coin 1 corresponds to the long run proportion that the process will be in state 0. More precisely, it corresponds to the limiting probability the process will be in state $j = 0$ at time $n$
+        \begin{equation*}
+           \pi_0 = \lim_{n \rightarrow \infty} P^n_{i0}
+        \end{equation*}
+        We can solve for this limiting probability by solving the following system of equations.
+        \begin{align*}
+            \pi_0 &= 0.6 \pi_0 + 0.5 \pi_1 \\
+            \pi_1 &= 0.4 \pi_0 + 0.5 \pi_1 \\
+            \pi_0 &= 1 - \pi_1
+        \end{align*}
+        It follows that the proportion of flips with coin 1 is $\pi_0 = 5/9$.
+
+        (b) This is equivalent to 
+        \begin{equation*}
+            Pr\set{X_4 = 1 | X_0 = 0} = P^{(4)}_{01} = 0.4444.
+        \end{equation*}
+        
+    \end{solution}
+
+    \nextproblem
+
+    \begin{problem}
+        A transition probability matrix $\vb{P}$ is said to be doubly stochastic if the sum over each column equals one; that is 
+        \begin{equation}
+            \sum_i P_{ij} = 1 \quad \forall j \geq 0.
+        \end{equation}
+        If such a chain is irreducible and aperiodic and consists of $M + 1$ states $\set{0, 1, \ldots, M}$, show that the limiting probabilities are given by
+        \begin{equation}
+            \pi_j = \frac{1}{M + 1}, \quad j = 0, 1, \ldots, M.
+        \end{equation}
+    \end{problem}
+
+    \begin{solution}
+        Irreducibility implies all states $X_n \in \mathcal{S}$ commute with each other; aperiodic implies all states have a period of $1$. These two properties ensure the limiting probabilities $\pi_j$ exist and are unique.
+
+        The limiting probabilities must satisfy the following system of equations. 
+        \begin{gather*}
+            \sum_i \pi_i = 1 \\
+            \pi_j = \sum_i \pi_i P_{ij} \quad \forall j \geq 0 \\
+            \sum_i P_{ij} = 1 \quad \forall j \geq 0 \\
+            \sum_j P_{ij} = 1 \quad \forall i \geq 0
+        \end{gather*}
+        Substitute $\pi_j = \frac{1}{M + 1}$ in $\pi_j = \sum_i \pi_i P_{ij}$.
+        \begin{gather*}
+            \pi_j = \sum_i \pi_i P_{ij} = \frac{1}{M + 1} \sum_i P_{ij} = \frac{1}{M + 1}
+        \end{gather*}
+        Since the solution to $\pi_j$ must be unique, we've shown the limiting probabilities are $\pi_j = \frac{1}{M + 1}$ for $j = 0,\ldots, M$.
+        
+    \end{solution}
+
+    \nextproblem
+
+    \begin{problem}
+        Let $P$ be the $n$ \emph{x} $n$ transition matrix of a Markov chain with a finite state space $S = \set{1, 2, \ldots, n}$. Show that $\pi$ is the stationary distribution of the Markov chain, i.e., $\pi P = \pi, \sum_i \pi_i = 1$ if and only if
+        \begin{equation}
+            \pi(\I - P + \one\one^T) = \one^T.
+            \label{eq:stationary}
+        \end{equation}
+    \end{problem}
+    \begin{solution}
+        \begin{proof}
+            First, assume $\pi$ is the stationary distribution of the Markov chain and show eq.~\ref{eq:stationary} holds.
+            \begin{align*}
+                \pi(\I - P + \one\one^T) &= \pi\I - \pi P + \pi\one\one^T \\
+                &= \pi - \pi + \one^T \textstyle\sum_i \pi_i \\
+                &= \one^T
+            \end{align*}
+            Next, assume eq.~\ref{eq:stationary} holds and show $\pi P = \pi$ and $\sum_i \pi_i = 1$.
+            \begin{gather*}
+                \pi(\I - P + \one\one^T) = \one^T \\
+                \pi\I - \one^T = \pi P - \pi\one\one^T \\
+                \pi - \one^T = \pi P - \one^T \textstyle\sum_i \pi_i
+            \end{gather*}
+            The final equality holds if $\pi P = \pi$ and $\sum_i \pi_i = 1$.
+        \end{proof}
+    \end{solution}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
