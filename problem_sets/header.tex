@@ -30,7 +30,7 @@
 \newcommand{\email}[1]{\texttt{\href{mailto:#1}{#1}}}
 \newcommand{\hreftt}[2]{\texttt{\href{#1}{#2}}}
 \newcommand{\pref}[1]{[\ref{#1}]}
-\newcommand{\nextproblem}[0]{\bigbreak}
+\newcommand{\nextproblem}[0]{\bigbreak \bigbreak}
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -44,7 +44,10 @@
     \begin{center}
         \nauthor        \\
         \email{\nemail} \\
-		\nthanks        \\
+        \ifdefined\nthanks
+            \nthanks \\
+        \fi
+		%\nthanks        \\
         \ndate
     \end{center}
 }
@@ -76,7 +79,6 @@
 \newcommand{\set}[1]{\ensuremath{\{#1\}}}
 \newcommand{\compl}[1]{\ensuremath{#1^{\complement}}}
 \newcommand{\factorial}[1]{\ensuremath{#1!}}
-\newcommand{\percentile}[0]{\ensuremath{\pi(r)}}
 \newcommand{\ceil}[1]{\ensuremath{\lceil #1 \rceil}}
 \newcommand{\floor}[1]{\ensuremath{\lfloor #1 \rfloor}}
 
